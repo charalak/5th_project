@@ -1,4 +1,4 @@
-function [misclass, ypred]= NN_misclass(XTrain,YTrain,xtest,ytest)
+function [misclass, ypred,net]= NN_misclass(XTrain,YTrain,xtest,ytest)
 % check size
 [Nr,Nc] = size(XTrain);
 if Nr>Nc
@@ -24,7 +24,7 @@ end
 train_func = 'trainscg';
 train_func = 'trainlm'; % <<
 % trainbr
-net = feedforwardnet(70,'trainbr');
+net = feedforwardnet(10,'trainlm');
 
 %-------------------
 %   Modified Performance Function

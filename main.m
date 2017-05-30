@@ -17,9 +17,10 @@ end
 
 
 %% load input and target data
-input = load([machine 'cb24ni/5th_project/nop_1e5_rand/input_nn1e5_rand.mat'],'input2');
+datafile = 'nop_1e5_rand';
+input = load([machine 'cb24ni/5th_project/' datafile '/input_nn1e5_rand.mat'],'input2');
 input = input.input2; input = input';
-target = load([machine 'cb24ni/5th_project/nop_1e5_rand/target_nn1e5_rand.mat'],'L2');
+target = load([machine 'cb24ni/5th_project/' datafile '/target_nn1e5_rand.mat'],'L2');
 target = target.L2; 
 % target = target(1,:);
 target = target';
@@ -32,7 +33,8 @@ YTrain = target(1:70000,:);
 xtest = input(70001:end,:);
 ytest = target(70001:end,:);
 
-[misclass, ypred] = NN_misclass(Xtrain,YTrain,xtest,ytest);
+[misclass, ypred,net] = NN_misclass(Xtrain,YTrain,xtest,ytest);
+save([machine 'cb24ni/5th_project/' datafile '/net_' net.trainFcn  '.mat'], 'net')
 plotconfusion(ytest',double(ypred))
 %% Multiple Neural Networks
     % to improve generalization, train multiple neural networks and average
