@@ -21,8 +21,8 @@ end
 % Feedforward neural network
 % net = feedforwardnet(10);
 % Pattern recognition network
-train_func = 'trainscg';
-train_func = 'trainlm'; % <<
+% train_func = 'trainscg';
+% train_func = 'trainlm'; % <<
 % trainbr
 net = feedforwardnet(10,'trainlm');
 
