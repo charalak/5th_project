@@ -8,21 +8,32 @@
 
 %-------------------------------------------------------
 clear all;
+%% machine
+if strcmp(computer, 'MACI64') 
+    machine = '/Users/charalak/Bifrost/';
+else
+    machine = '/mn/stornext/u3/charalak/Bifrost_cvs/';
+end
+
+
 %% load input and target data
-input = load('/Users/charalak/Bifrost/cb24ni/5th_project/nop_1e5_rand/input_nn1e5_rand.mat','input2');
+input = load([machine 'cb24ni/5th_project/nop_1e5_rand/input_nn1e5_rand.mat'],'input2');
 input = input.input2; input = input';
-target = load('/Users/charalak/Bifrost/cb24ni/5th_project/nop_1e5_rand/target_nn1e5_rand.mat','L2');
+target = load([machine 'cb24ni/5th_project/nop_1e5_rand/target_nn1e5_rand.mat'],'L2');
 target = target.L2; 
 % target = target(1,:);
 target = target';
-
+target(:,1);
+%% run NN_missclass
+ 
 
 Xtrain = input(1:70000,:);
 YTrain = target(1:70000,:);
 xtest = input(70001:end,:);
 ytest = target(70001:end,:);
 
-misclass = NN_misclass(Xtrain,YTrain,xtest,ytest)
+[misclass, ypred] = NN_misclass(Xtrain,YTrain,xtest,ytest);
+plotconfusion(ytest',double(ypred))
 %% Multiple Neural Networks
     % to improve generalization, train multiple neural networks and average
     % their outputs.
@@ -42,7 +53,11 @@ misclass = NN_misclass(Xtrain,YTrain,xtest,ytest)
 % [trainT,valT,testT] = divideind(t,trainInd,valInd,testInd);
 
 %% sequential feature selection to fit the model
+if 0
 opts = statset('display','iter');
 % trainbr
 % c = cvpartition(target,'k',10);  % create 10-fold cross validation
-[in,history] = sequentialfs(@NN_misclass,input,target,'cv',10,'options',opts)
+% [in,history] = sequentialfs(@NN_misclass,input,target,'cv',10,'options',opts)
+[in,history] = sequentialfs(@NN_misclass,input,target,'cv',10)
+
+end
