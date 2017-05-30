@@ -27,23 +27,32 @@ z=repmat(zz,768,768,1);
 clearvars zz
 L = fitsread([lcc_file 'lcc_' num2str(it,'%04.0f')  '_fiji_3Donly.fits']);
 
-% reshape
-num=10000000;
-qj =reshape(qj,[],1); qj=qj(1:num);
-qv =reshape(qv,[],1); qv = qv(1:num);
-tg =reshape(tg,[],1); tg=tg(1:num);
-p =reshape(p,[],1);    p = p(1:num);
-nel =reshape(nel,[],1); nel = nel(1:num);
-L =reshape(L,[],1); L = L>0;  L=L(1:num);
-z =reshape(z,[],1); z = z(1:num);
+% reshape from 3D array to 1D array
+num=1e6;   % <<<<
+qj =reshape(qj,[],1); 
+qv =reshape(qv,[],1); 
+tg =reshape(tg,[],1); 
+p =reshape(p,[],1);    
+nel =reshape(nel,[],1); 
+L =reshape(L,[],1); L = L>0;  
+z =reshape(z,[],1); 
+% choose pixels because the total number is too large
+    % choose the first 'num' pixels 
+% qj=qj(1:num); qv = qv(1:num); tg=tg(1:num); p = p(1:num);
+% nel = nel(1:num);  L=L(1:num); z = z(1:num);
+
+    % choose 'num' random pixels
+idx = randi(numel(L),1,num);
+ qj=qj(idx); qv = qv(idx); tg=tg(idx); p = p(idx);
+ nel = nel(idx);  L=L(idx); z = z(idx);
 
 input2 = [qj'; qv'; tg'; p'; nel'; z'];
 L2 = zeros(2,num);
 L2(1,:) = L>0;
 L2(2,:) = L==0;
 
-save('/Users/charalak/Bifrost/cb24ni/5th_project/input_nn1e7.mat','input2')
-save('/Users/charalak/Bifrost/cb24ni/5th_project/target_nn1e7.mat','L2')
+save('/Users/charalak/Bifrost/cb24ni/5th_project/nop_1e6_rand/input_nn1e6_rand.mat','input2')
+save('/Users/charalak/Bifrost/cb24ni/5th_project/nop_1e6_rand/target_nn1e6_rand.mat','L2')
 
 %  clearvars qj qv tg p nel  z
 
