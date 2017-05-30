@@ -34,6 +34,7 @@ xtest = input(70001:end,:);
 ytest = target(70001:end,:);
 
 [misclass, ypred,net] = NN_misclass(Xtrain,YTrain,xtest,ytest);
+display(['missclssified' num2str(misclass)])
 save([machine 'cb24ni/5th_project/' datafile '/net_' net.trainFcn  '.mat'], 'net')
 plotconfusion(ytest',double(ypred))
 %% Multiple Neural Networks
