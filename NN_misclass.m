@@ -24,7 +24,7 @@ end
 % train_func = 'trainscg';
 % train_func = 'trainlm'; % <<
 % trainbr
-net = feedforwardnet(10,'trainlm');
+net = feedforwardnet(100,'trainlm');
 
 %-------------------
 %   Modified Performance Function

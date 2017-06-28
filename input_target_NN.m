@@ -51,8 +51,9 @@ L2 = zeros(2,num);
 L2(1,:) = L>0;
 L2(2,:) = L==0;
 
-save('/Users/charalak/Bifrost/cb24ni/5th_project/nop_1e6_rand/input_nn1e6_rand.mat','input2')
-save('/Users/charalak/Bifrost/cb24ni/5th_project/nop_1e6_rand/target_nn1e6_rand.mat','L2')
+datafile = 'nop_1e6_rand';
+save(['/Users/charalak/Bifrost/cb24ni/5th_project/' datafile '/input_nn' datafile '.mat'],'input2')
+save(['/Users/charalak/Bifrost/cb24ni/5th_project/' datafile '/target_nn' datafile '.mat'],'L2')
 
 %  clearvars qj qv tg p nel  z
 
