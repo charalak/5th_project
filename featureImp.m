@@ -11,7 +11,7 @@ function criterion = featureImp(Xtrain,Ytrain,Xtest,Ytest,modeltype)
 
 switch modeltype
     case 'LinearModel'
-        lm = LinearModel.fit(Xtrain,double(Ytrain));
+        lm = fitlm(Xtrain,double(Ytrain));
         
         Y_lm = lm.predict(Xtest);
         Y_lm = round(Y_lm);
@@ -19,16 +19,16 @@ switch modeltype
         Y_lm(Y_lm > 2) = 2;
         Cmat = confusionmat(double(Ytest),Y_lm);
     case 'GeneralizedLinearModel'
-        glm = GeneralizedLinearModel.fit(Xtrain,double(Ytrain)-1,'linear','Distribution','binomial','link','logit');
+        glm = fitglm(Xtrain,double(Ytrain),'quadratic','Distribution','normal','link','identity');
         Y_glm = glm.predict(Xtest);
-        Y_glm = round(Y_glm) + 1;
-        Cmat = confusionmat(double(Ytest),Y_glm);
+        Y_glm = round(Y_glm);% + 1;
+        Cmat = confusionmat(logical(Ytest),logical(Y_glm));
     case 'ClassificationDiscriminant'
-        da = ClassificationDiscriminant.fit(Xtrain,Ytrain,'discrimType','quadratic');
+        da = fitcdiscr(Xtrain, Ytrain, 'DiscrimType', 'Quadratic');
         Y_da = da.predict(Xtest);
         Cmat = confusionmat(Ytest,Y_da);
     case 'ClassificationKNN'
-        knn = ClassificationKNN.fit(Xtrain,Ytrain);
+        knn = fitcknn(Xtrain,Ytrain,'Distance','seuclidean');
         Y_knn = knn.predict(Xtest);
         Cmat = confusionmat(Ytest,Y_knn);
     case 'NaiveBayes'
@@ -40,16 +40,21 @@ switch modeltype
         Y_svm = ClassificationSVM(svmStruct,Xtest);
         Cmat = confusionmat(Ytest,Y_svm);
     case 'ClassificationTree'
-        t = ClassificationTree.fit(Xtrain,Ytrain);
+%         t = ClassificationTree.fit(Xtrain,Ytrain);
+      t =  fitctree(Xtrain,Ytrain, 'MinLeafSize',1,...
+    'MaxNumSplits', 807,...
+    'SplitCriterion', 'gdi',...
+    'NumVariablesToSample', 54);
         Y_t = t.predict(Xtest);
         Cmat = confusionmat(Ytest,Y_t);
     case 'TreeBagger'
         cost = [0 1
-                5 0];
-        tb = TreeBagger(120,Xtrain,Ytrain,'method','classification','cost',cost);
+                1 0];
+        tb = TreeBagger(25,Xtrain,Ytrain,'method','classification','cost',cost);
         Y_tb = tb.predict(Xtest);
         Y_tb = nominal(Y_tb);
-        Cmat = confusionmat(Ytest,Y_tb);
+        %Cmat = confusionmat(nominal(Ytest),Y_tb);
+        Cmat =confusionmat(categorical(Ytest,[0 1]),categorical(Y_tb));
     case 'NN'
         [~, net] = NNfun(Xtrain,Ytrain);
         Y_nn = net(Xtest');

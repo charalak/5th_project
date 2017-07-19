@@ -26,7 +26,9 @@ ylabel('Percentage')
 title({'Joule heating events vs. slow-burning currents','Misclassification Rate'},'FontWeight','bold')
 ylim([0 101])
 legend({'Event','Misclassified','Slow-burning','Misclassified'},'Location','EastOutside')
-xtickangle(60);
+%xtickangle(60);
+ax = gca;
+xa = ax.XAxis; xa.TickLabelRotation = 60;
 set(gca,'Unit','normalized','Position',[0.13 0.3 0.6 0.6])
 set(gca,'Color','none','FontSize',18)
 
